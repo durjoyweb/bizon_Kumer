@@ -10,6 +10,10 @@
     />
     <link rel="stylesheet" href="./protfolio.css" />
     <link rel="shortcut icon" href="./bizon_profile.png" type="image/x-icon" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"
+    ></script>
   </head>
   <body>
     <!-- NAV -->
@@ -469,6 +473,52 @@
     </footer>
 
     <script>
+      // Initialize EmailJS
+      emailjs.init("20ohBhh8aN4WZiZLW");
+
+      // Contact Form Handler
+      const contactForm = document.getElementById("contact-form");
+      const submitBtn = document.getElementById("submit-btn");
+      const formMessage = document.getElementById("form-message");
+
+      contactForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        submitBtn.textContent = "Sending...";
+        submitBtn.disabled = true;
+        formMessage.className = "";
+
+        try {
+          const response = await emailjs.send(
+            "service_ilw9doc",
+            "template_jnnn11i",
+            {
+              from_name: document.getElementById("from_name").value,
+              from_email: document.getElementById("from_email").value,
+              subject: document.getElementById("subject").value,
+              message: document.getElementById("message").value,
+              to_email: "Bizonkumer@gmail.com",
+            },
+          );
+
+          if (response.status === 200) {
+            formMessage.textContent = "✓ Message sent successfully!";
+            formMessage.className = "form-message success";
+            contactForm.reset();
+            setTimeout(() => {
+              formMessage.className = "";
+              formMessage.textContent = "";
+            }, 4000);
+          }
+        } catch (error) {
+          formMessage.textContent =
+            "✗ Failed to send message. Please try again.";
+          formMessage.className = "form-message error";
+        } finally {
+          submitBtn.textContent = "Send Message ✈";
+          submitBtn.disabled = false;
+        }
+      });
+
       // Scroll reveal
       const reveals = document.querySelectorAll(".reveal");
       const observer = new IntersectionObserver(
